@@ -7,17 +7,24 @@ import Pitch from '../components/3d/Pitch';
 import Ball from '../components/3d/Ball';
 import type { BallHandle } from '../components/3d/Ball';
 
+import type { HeightOption, DirectionOption } from '../components/ShootControls';
+
 interface PenaltyShootoutProps {
-  onGoal?: () => void;
-  onReset?: () => void;
+  onGoal?:    () => void;
+  onReset?:   () => void;
+  onShoot?:   () => void;
+  power?:     number;
+  height?:    HeightOption;
+  direction?: DirectionOption;
 }
 
-export default function PenaltyShootout({ onGoal, onReset }: PenaltyShootoutProps) {
+export default function PenaltyShootout({
+  onGoal, onReset, onShoot,
+  power = 3, height = 'mid', direction = 'centre',
+}: PenaltyShootoutProps) {
   const ballRef = useRef<BallHandle>(null!);
-  const [goals, setGoals] = useState(0);
 
   const handleGoal = useCallback(() => {
-    setGoals(g => g + 1);
     onGoal?.();
     // Auto-reset ball after brief celebration delay
     setTimeout(() => {
@@ -49,7 +56,7 @@ export default function PenaltyShootout({ onGoal, onReset }: PenaltyShootoutProp
       {/* ── Scene ────────────────────────────────────────── */}
       <Pitch />
       <Goal onGoal={handleGoal} />
-      <Ball ref={ballRef} />
+      <Ball ref={ballRef} onShoot={onShoot} power={power} height={height} direction={direction} />
     </Physics>
   );
 }

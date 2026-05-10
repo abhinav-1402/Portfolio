@@ -1,14 +1,17 @@
 // Pitch.tsx – Green ground with penalty-spot markings
-import { RigidBody } from '@react-three/rapier';
+import { RigidBody, CuboidCollider } from '@react-three/rapier';
 import * as THREE from 'three';
 
 export default function Pitch() {
   return (
     <group>
-      {/* ── Ground plane (physics floor) ─────────────── */}
-      <RigidBody type="fixed" colliders="cuboid" friction={0.8} restitution={0.4}>
-        {/* Cuboid collider needs a visible mesh child OR explicit args */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      {/* ── Ground physics — explicit thick collider so ball can't fall through ── */}
+      <RigidBody type="fixed" friction={0.8} restitution={0.4}>
+        <CuboidCollider args={[9, 0.1, 7]} position={[0, -0.1, 0]} />
+      </RigidBody>
+
+      {/* ── Visual ground plane (purely decorative) ─────── */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
           <planeGeometry args={[18, 14]} />
           <meshStandardMaterial
             color="#1a4a1a"
@@ -16,7 +19,6 @@ export default function Pitch() {
             metalness={0.0}
           />
         </mesh>
-      </RigidBody>
 
       {/* ── Centre stripe (subtle pitch pattern) ─────── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]}>

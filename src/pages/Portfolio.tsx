@@ -157,7 +157,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
       style={{
         fontFamily: sans, color: t.text,
         transition: 'color 0.4s',
-        overflowX: 'hidden', width: '100%', pointerEvents: 'auto',
+        overflowX: 'hidden', width: '100%', pointerEvents: 'none',
       }}
     >
       {/* Global keyframes & resets */}
@@ -220,6 +220,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
         position: 'relative', overflow: 'hidden',
         /* Hero bg is transparent so the 3D canvas shows through on the right */
         background: 'transparent',
+        pointerEvents: 'none',
       }}>
         {/* Grid overlay – only left half so it doesn't cover the 3D side */}
         <div style={{
@@ -232,7 +233,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
         }} />
 
         {/* ── LEFT COLUMN — text content ───────────────────────────────── */}
-        <div style={{ padding: '0 40px 0 40px', zIndex: 2 }}>
+        <div style={{ padding: '0 40px 0 40px', zIndex: 2, pointerEvents: 'auto' }}>
           {/* Left panel bg so text is readable over the transparent hero */}
           <div style={{
             position: 'absolute', top: 0, left: 0, bottom: 0, width: '52%',
@@ -355,7 +356,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
       </section>
 
       {/* ══ ABOUT ══════════════════════════════════════════════════════════ */}
-      <section id="about" style={{ padding: '86px 40px', background: t.surface }}>
+      <section id="about" style={{ padding: '86px 40px', background: t.surface, pointerEvents: 'auto' }}>
         <SectionHeader num="01" title="About" />
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 48, alignItems: 'start' }}>
@@ -417,7 +418,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
       </section>
 
       {/* ══ SKILLS ═════════════════════════════════════════════════════════ */}
-      <section id="skills" style={{ padding: '86px 40px', background: t.surface2 }}>
+      <section id="skills" style={{ padding: '86px 40px', background: t.surface2, pointerEvents: 'auto' }}>
         <SectionHeader num="02" title="Skills" />
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 20 }}>
@@ -456,7 +457,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
       </section>
 
       {/* ══ PROJECTS ═══════════════════════════════════════════════════════ */}
-      <section id="projects" style={{ padding: '86px 40px', background: t.surface }}>
+      <section id="projects" style={{ padding: '86px 40px', background: t.surface, pointerEvents: 'auto' }}>
         <SectionHeader num="03" title="Projects" />
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 22 }}>
@@ -543,7 +544,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
       </section>
 
       {/* ══ CONTACT ════════════════════════════════════════════════════════ */}
-      <section id="contact" style={{ padding: '86px 40px', background: t.surface2 }}>
+      <section id="contact" style={{ padding: '86px 40px', background: t.surface2, pointerEvents: 'auto' }}>
         <SectionHeader num="04" title="Contact" />
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 60, alignItems: 'start' }}>
@@ -657,6 +658,7 @@ export default function Portfolio({ onShoot: _onShoot }: PortfolioProps) {
         padding: '22px 40px', background: t.surface,
         borderTop: `1px solid ${t.border}`,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10,
+        pointerEvents: 'auto',
       }}>
         <p style={{ fontFamily: mono, fontSize: 10, color: t.muted, letterSpacing: '0.1em', margin: 0 }}>
           © 2025 <span style={{ color: t.accent }}>Abhinav Premkumar</span> — Chennai, India

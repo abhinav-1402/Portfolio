@@ -3,6 +3,8 @@ import Portfolio from './Portfolio';
 import ThemeToggle from '../components/ThemeToggle';
 import LoaderScene from '../scenes/LoaderScene';
 import PenaltyShootout from '../scenes/PenaltyShootout';
+import ShootControls from '../components/ShootControls';
+import type { HeightOption, DirectionOption } from '../components/ShootControls';
 import { Canvas } from '@react-three/fiber';
 import { useTheme } from '../context/ThemeContext';
 
@@ -11,10 +13,17 @@ function Main() {
   const { theme } = useTheme();
   const dark = theme === 'dark';
 
-  const [goals, setGoals] = useState(0);
+  // ── Score state ───────────────────────────────────────────────────────
+  const [goals, setGoals]           = useState(0);
+  const [shots, setShots]           = useState(0);
   const [showGoalFlash, setShowGoalFlash] = useState(false);
-  const [shots, setShots]   = useState(0);
+  const [gameKey, setGameKey]       = useState(0);
   const flashTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  // ── Shot controls state ───────────────────────────────────────────────
+  const [power,     setPower]     = useState<number>(3);
+  const [height,    setHeight]    = useState<HeightOption>('mid');
+  const [direction, setDirection] = useState<DirectionOption>('centre');
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 3000);
@@ -30,6 +39,12 @@ function Main() {
 
   const handleShoot = () => setShots(s => s + 1);
 
+  const handleReset = () => {
+    setGameKey(k => k + 1);
+    setShots(0);
+    setGoals(0);
+  };
+
   return (
     <div className="w-screen h-screen relative transition-colors duration-500 overflow-hidden"
       style={{ background: dark ? '#000000' : '#EEEEEE' }}
@@ -38,7 +53,7 @@ function Main() {
 
       {/* ── 1. UI (Portfolio) ─────────────────────────────── */}
       {!loading && (
-        <div className="absolute inset-0 z-10 overflow-y-auto">
+        <div className="absolute inset-0 z-10 overflow-y-auto pointer-events-none">
           <Portfolio onShoot={handleShoot} />
         </div>
       )}
@@ -55,12 +70,19 @@ function Main() {
           <LoaderScene />
         ) : (
           <Suspense fallback={null}>
-            <PenaltyShootout onGoal={handleGoal} />
+            <PenaltyShootout
+              key={gameKey}
+              onGoal={handleGoal}
+              onShoot={handleShoot}
+              power={power}
+              height={height}
+              direction={direction}
+            />
           </Suspense>
         )}
       </Canvas>
 
-      {/* ── 3. HUD overlay (goals / hint) ─────────────────── */}
+      {/* ── 3. HUD overlay ────────────────────────────────── */}
       {!loading && (
         <>
           {/* Score badge */}
@@ -84,19 +106,37 @@ function Main() {
             <span style={{ fontSize: 14, color: dark ? '#666' : '#888', marginLeft: 4 }}>/ {shots}</span>
           </div>
 
-          {/* Hint label */}
-          <div
+          {/* ── Shot Controls Panel ────────────────────────── */}
+          <ShootControls
+            dark={dark}
+            power={power}
+            height={height}
+            direction={direction}
+            onPowerChange={setPower}
+            onHeightChange={setHeight}
+            onDirectionChange={setDirection}
+          />
+
+          {/* Reset Button – centred at bottom */}
+          <button
+            onClick={handleReset}
             style={{
-              position: 'fixed', bottom: 28, right: 28, zIndex: 50,
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
-              color: dark ? 'rgba(8,203,0,0.55)' : 'rgba(37,57,0,0.55)',
-              pointerEvents: 'none',
-              animation: 'pulse 2.5s ease-in-out infinite',
+              position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+              zIndex: 100, fontFamily: "'Barlow Condensed', sans-serif",
+              fontSize: 12, fontWeight: 700, letterSpacing: '0.1em',
+              textTransform: 'uppercase', padding: '8px 20px',
+              background: 'rgba(8,203,0,0.15)', color: '#08CB00',
+              border: '1px solid rgba(8,203,0,0.3)', cursor: 'pointer',
+              backdropFilter: 'blur(8px)',
+              clipPath: 'polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)',
+              transition: 'all .2s',
+              pointerEvents: 'auto',
             }}
+            onMouseOver={e => (e.currentTarget.style.background = 'rgba(8,203,0,0.3)')}
+            onMouseOut={e => (e.currentTarget.style.background = 'rgba(8,203,0,0.15)')}
           >
-            ↗ click the ball to shoot
-          </div>
+            Reset Game ↺
+          </button>
 
           {/* GOAL! flash */}
           {showGoalFlash && (
@@ -124,10 +164,10 @@ function Main() {
             </div>
           )}
 
-          {/* Keyframes for HUD */}
+          {/* Keyframes */}
           <style>{`
-            @keyframes pulse       { 0%,100%{opacity:.4} 50%{opacity:1} }
-            @keyframes goalFlash   { 0%{opacity:0;transform:scale(.6)} 20%{opacity:1;transform:scale(1.08)} 70%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1.05)} }
+            @keyframes blink      { 0%,100%{opacity:1}  50%{opacity:0} }
+            @keyframes goalFlash  { 0%{opacity:0;transform:scale(.6)} 20%{opacity:1;transform:scale(1.08)} 70%{opacity:1;transform:scale(1)} 100%{opacity:0;transform:scale(1.05)} }
           `}</style>
         </>
       )}
