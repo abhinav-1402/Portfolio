@@ -16,12 +16,12 @@ interface ShootControlsProps {
 
 // ── Helper: segmented button group ───────────────────────────────────────────
 function SegGroup<T extends string>({
-  options, value, onChange, mono, accent, border, muted, dark,
+  options, value, onChange, mono, accent, border, muted,
 }: {
   options: { label: string; value: T }[];
   value: T;
   onChange: (v: T) => void;
-  mono: string; accent: string; border: string; muted: string; dark: boolean;
+  mono: string; accent: string; border: string; muted: string;
 }) {
   return (
     <div style={{ display: 'flex', gap: 6 }}>
@@ -59,19 +59,60 @@ export default function ShootControls({
   onPowerChange, onHeightChange, onDirectionChange,
 }: ShootControlsProps) {
   const mono   = "'JetBrains Mono', monospace";
-  const cond   = "'Barlow Condensed', sans-serif";
   const accent = '#08CB00';
   const border = dark ? 'rgba(8,203,0,0.2)' : 'rgba(37,57,0,0.2)';
   const muted  = dark ? '#666' : '#888';
   const bg     = dark ? 'rgba(0,0,0,0.78)' : 'rgba(238,238,238,0.82)';
-  const text   = dark ? '#EEEEEE' : '#000';
+
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = React.useState(() => window.innerWidth < 1024);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  if (isCollapsed) {
+    return (
+      <button
+        onClick={() => setIsCollapsed(false)}
+        style={{
+          position: 'absolute',
+          bottom: isMobile ? 16 : 24,
+          right: isMobile ? 16 : 24,
+          zIndex: 200,
+          fontFamily: mono,
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          padding: '8px 16px',
+          background: 'rgba(8,203,0,0.12)',
+          color: accent,
+          border: `1px solid ${border}`,
+          backdropFilter: 'blur(14px)',
+          clipPath: 'polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)',
+          cursor: 'pointer',
+          pointerEvents: 'auto',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          transition: 'all .2s',
+        }}
+        onMouseOver={e => (e.currentTarget.style.borderColor = accent)}
+        onMouseOut={e => (e.currentTarget.style.borderColor = border)}
+      >
+        Config ⚙️
+      </button>
+    );
+  }
 
   return (
     <div
       style={{
-        position: 'fixed',
-        bottom: 24,
-        right: 24,
+        position: 'absolute',
+        bottom: isMobile ? 16 : 24,
+        right: isMobile ? 16 : 24,
         zIndex: 200,
         width: 240,
         background: bg,
@@ -80,19 +121,39 @@ export default function ShootControls({
         padding: '16px 18px 18px',
         clipPath: 'polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)',
         pointerEvents: 'auto',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
       }}
     >
       {/* Header */}
       <div style={{
         fontFamily: mono, fontSize: 9, letterSpacing: '0.2em',
         textTransform: 'uppercase', color: accent, marginBottom: 14,
-        display: 'flex', alignItems: 'center', gap: 7,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 7,
       }}>
-        <span style={{
-          width: 6, height: 6, borderRadius: '50%', background: accent,
-          display: 'inline-block', animation: 'blink 2s ease-in-out infinite',
-        }} />
-        // shot_config.exe
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <span style={{
+            width: 6, height: 6, borderRadius: '50%', background: accent,
+            display: 'inline-block', animation: 'blink 2s ease-in-out infinite',
+          }} />
+          // shot_config.exe
+        </div>
+        <button
+          onClick={() => setIsCollapsed(true)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: accent,
+            fontFamily: mono,
+            fontSize: 9,
+            letterSpacing: '0.12em',
+            cursor: 'pointer',
+            padding: '2px 6px',
+            borderBottom: `1px solid ${accent}`,
+            textTransform: 'uppercase',
+          }}
+        >
+          [Close]
+        </button>
       </div>
 
       {/* ── Power slider ────────────────────────────────── */}
@@ -138,7 +199,7 @@ export default function ShootControls({
           ]}
           value={height}
           onChange={onHeightChange}
-          mono={mono} accent={accent} border={border} muted={muted} dark={dark}
+          mono={mono} accent={accent} border={border} muted={muted}
         />
       </div>
 
@@ -158,7 +219,7 @@ export default function ShootControls({
           ]}
           value={direction}
           onChange={onDirectionChange}
-          mono={mono} accent={accent} border={border} muted={muted} dark={dark}
+          mono={mono} accent={accent} border={border} muted={muted}
         />
       </div>
 
