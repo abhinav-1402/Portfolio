@@ -1,6 +1,6 @@
 // Pitch.tsx – Green ground with penalty-spot markings
-import { RigidBody, CuboidCollider } from '@react-three/rapier';
-import * as THREE from 'three';
+import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import * as THREE from "three";
 
 export default function Pitch() {
   return (
@@ -12,18 +12,19 @@ export default function Pitch() {
 
       {/* ── Visual ground plane (purely decorative) ─────── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[18, 14]} />
-          <meshStandardMaterial
-            color="#1a4a1a"
-            roughness={0.9}
-            metalness={0.0}
-          />
-        </mesh>
+        <planeGeometry args={[18, 14]} />
+        <meshStandardMaterial color="#1a4a1a" roughness={0.9} metalness={0.0} />
+      </mesh>
 
       {/* ── Centre stripe (subtle pitch pattern) ─────── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]}>
         <planeGeometry args={[18, 7]} />
-        <meshStandardMaterial color="#1e5a1e" roughness={0.95} transparent opacity={0.6} />
+        <meshStandardMaterial
+          color="#1e5a1e"
+          roughness={0.95}
+          transparent
+          opacity={0.6}
+        />
       </mesh>
 
       {/* ── Goal area box – white lines ──────────────── */}
@@ -54,16 +55,25 @@ export default function Pitch() {
         const arcPoints: THREE.Vector3[] = [];
         for (let i = 0; i <= 40; i++) {
           const angle = (Math.PI / 40) * i;
-          arcPoints.push(new THREE.Vector3(
-            Math.cos(Math.PI + angle) * 1.8,
-            0,
-            Math.sin(Math.PI + angle) * 1.8 + 1.5,
-          ));
+          arcPoints.push(
+            new THREE.Vector3(
+              Math.cos(Math.PI + angle) * 1.8,
+              0,
+              Math.sin(Math.PI + angle) * 1.8 + 1.5,
+            ),
+          );
         }
         const geo = new THREE.BufferGeometry().setFromPoints(arcPoints);
+
         return (
-          <line geometry={geo}>
-            <lineBasicMaterial color="#ffffff" transparent opacity={0.5} />
+          <line>
+            <primitive object={geo} attach="geometry" />
+            <lineBasicMaterial
+              attach="material"
+              color="#ffffff"
+              transparent
+              opacity={0.5}
+            />
           </line>
         );
       })()}
