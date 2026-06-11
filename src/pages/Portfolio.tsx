@@ -25,14 +25,7 @@ const SKILLS = {
     "Module Federation",
   ],
   Backend: ["Node.js", "Express", "Prisma ORM", "REST APIs"],
-  "Tools & DB": [
-    "Git & GitHub",
-    "PostgreSQL",
-    "DBeaver",
-    "Vite",
-    "VS Code",
-    "Figma",
-  ],
+  "Tools & DB": ["Git & GitHub", "PostgreSQL", "DBeaver", "Vite", "VS Code"],
 };
 
 const PROJECTS = [
@@ -41,28 +34,28 @@ const PROJECTS = [
     featured: true,
     title: "3D Portfolio",
     tags: ["React", "Three.js", "R3F", "GLTF", "Tailwind"],
-    desc: "The very site you are looking at. A production-grade personal portfolio built with React and Three.js — featuring a GLTF football loader, dark/light theming, micro-animated sections, and a scalable component architecture designed to grow with every project I ship.",
+    desc: "The very site you are looking at. A personal portfolio built with React and Three.js featuring a GLTF football, micro-animated sections, and a scalable component architecture designed to grow with every project I ship.",
     live: "#",
-    github: "https://github.com/YOUR_GITHUB/portfolio",
+    github: "#",
     label: "FOLIO",
   },
   {
     id: 2,
     featured: false,
-    title: "Coming Soon",
-    tags: ["React", "Node.js", "Prisma"],
-    desc: "Next project in progress. Check back soon — or better yet, reach out and we can build something together.",
+    title: "Let's Talk",
+    tags: ["Ideas", "Startups", "Collaboration"],
+    desc: "Have a project in mind? I'd love to hear about it and explore how we can bring it to life.",
     github: "#",
-    label: "WIP",
+    label: "CONTACT",
   },
   {
     id: 3,
     featured: false,
-    title: "Coming Soon",
-    tags: ["TypeScript", "Express", "PostgreSQL"],
-    desc: "Another project loading. The commit history is already looking good.",
+    title: "Your Project Here",
+    tags: ["React", "Full Stack", "Available"],
+    desc: "The next card could be your project. Let's build something fast, clean, and impactful.",
     github: "#",
-    label: "WIP",
+    label: "OPEN",
   },
 ];
 
@@ -402,7 +395,9 @@ export default function Portfolio({
           style={{
             padding: isMobile ? "40px 20px 20px 20px" : "0 40px 0 40px",
             zIndex: 2,
-            pointerEvents: "auto",
+            /* none here so clicks pass through to the fixed 3D canvas below.
+               Interactive children (CTAs) re-enable pointer-events:auto. */
+            pointerEvents: "none",
           }}
         >
           {/* Left panel bg so text is readable over the transparent hero */}
@@ -542,22 +537,26 @@ export default function Portfolio({
                 animation: "fadeUp .65s .22s ease both",
               }}
             >
-              I turn complex problems into clean, fast interfaces — I build
-              things that{" "}
-              <span style={{ color: t.accent, fontWeight: 500 }}>work</span> and{" "}
+              I enjoy turning complex problems into clean, intuitive interfaces,
+              focusing on building products that are both{" "}
               <span style={{ color: t.accent, fontWeight: 500 }}>
-                look like they mean it
+                functional
+              </span>{" "}
+              and{" "}
+              <span style={{ color: t.accent, fontWeight: 500 }}>
+                thoughtfully designed.
               </span>
               .
             </p>
 
-            {/* CTAs */}
+            {/* CTAs — re-enable pointer events so the links are clickable */}
             <div
               style={{
                 display: "flex",
                 gap: 12,
                 flexWrap: "wrap",
                 animation: "fadeUp .65s .3s ease both",
+                pointerEvents: "auto",
               }}
             >
               <a
@@ -672,11 +671,11 @@ export default function Portfolio({
               fontSize: 9,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: `rgba(${t.accentRgb},0.4)`,
+              color: t.accent,
               pointerEvents: "none",
             }}
           >
-            // penalty_shootout.exe
+            Click to shoot{" "}
           </div>
         </div>
 
@@ -807,7 +806,7 @@ export default function Portfolio({
                 margin: 0,
               }}
             >
-              Hey — I'm{" "}
+              Hey I'm{" "}
               <strong style={{ color: t.text, fontWeight: 600 }}>
                 Abhinav Premkumar
               </strong>
@@ -815,9 +814,9 @@ export default function Portfolio({
               <strong style={{ color: t.accent, fontWeight: 500 }}>
                 Chennai, India
               </strong>
-              . I've spent the past year building real-world applications — from
-              micro-frontend architectures to 3D web experiences — picking up
-              new tools fast and shipping clean, maintainable code.
+              . I've spent the past year building real-world applications from
+              micro-frontend architectures to 3D web experiences picking up new
+              tools fast and shipping clean, maintainable code.
               <br />
               <br />I care about the craft on both ends: a well-structured API
               and an interface that feels effortless to use. I'm actively
@@ -888,7 +887,7 @@ export default function Portfolio({
                 marginBottom: 22,
               }}
             >
-              // abhinav.config.json
+              // Current Status
             </p>
             {(
               [
@@ -1400,7 +1399,7 @@ export default function Portfolio({
                   type="text"
                   name="name"
                   required
-                  placeholder="John Doe"
+                  placeholder="Your name"
                   style={{
                     background: t.formBg,
                     border: `1px solid ${t.border}`,
@@ -1442,7 +1441,7 @@ export default function Portfolio({
                   type="email"
                   name="email"
                   required
-                  placeholder="john@company.com"
+                  placeholder="name@email.com"
                   style={{
                     background: t.formBg,
                     border: `1px solid ${t.border}`,
