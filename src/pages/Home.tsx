@@ -27,7 +27,6 @@ function useCanvasScrollForward(
     };
     canvas.addEventListener("wheel", onWheel, { passive: true });
 
-    // ── Mobile: forward touch-drag to page scroll, leave taps for R3F ──
     let lastY = 0;
     let lastX = 0;
 
